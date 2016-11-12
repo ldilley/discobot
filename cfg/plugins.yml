@@ -1,0 +1,7 @@
+plugins:
+# - discofever  # plays some disco music (requires ffmpeg and libsodium)
+  - help        # displays bot help
+# - joinv       # join voice channel (requires ffmpeg and libsodium)
+  - shutdown    # shuts down the bot
+# - silence     # stops playing audio (requires ffmpeg and libsodium)
+  - uptime      # reports bot uptime
