@@ -1,0 +1,26 @@
+# IRC bridge configuration
+
+# IRC server
+server: irc.some.network
+
+# Nickname
+nick: DiscoBot
+
+# Username
+user: discobot
+
+# Real name
+real_name: Discord <-> IRC Bridge
+
+# Optionally set a password to identify to NickServ
+#nickserv_password: secret
+
+# Optionally set a server password to connect with
+#server_password: secret
+
+# Channel mappings
+channel_mappings:
+ - discord_channel: #lobby
+   irc_channel: #general
+ - discord_channel: #somechannel
+   irc_channel: #anotherchannel

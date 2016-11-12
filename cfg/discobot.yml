@@ -1,0 +1,14 @@
+# Client ID of the bot
+client_id: 000
+
+# Auth token
+token: AbCDeFg123
+
+# Bot command prefix
+prefix: '!'
+
+# Client ID of owner
+owner_id: 000
+
+# Bot status (leave blank for no status)
+status: Music from the 1970s
