@@ -16,6 +16,8 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+require_relative 'log'
+
 class Plugins
   @plugin_map = {}
 
@@ -23,14 +25,18 @@ class Plugins
     begin
       plugins = YAML.load_file('cfg/plugins.yml')
       plugins = plugins.values.flatten.map(&:to_sym) # convert strings from config to symbols
-    rescue
-      puts 'Unable to open plugins.yml!'
-      return
+    rescue => exception
+      puts "Unable to open plugins.yml: #{exception}"
+      Log.write(Log::CRIT, "Unable to open plugins.yml: #{exception}")
+      #raise
+      exit! # unless reloaded
     end
 
     # Initialize each plugin
     plugins.each { |plugin_name| @plugin_map[plugin_name] = instance_eval(File.read("plugins/#{plugin_name}.rb")) }
     @plugin_map.each_value { |plugin| plugin.init(bot) }
+    # ToDo: Handle exceptions separately for both operations directly above and log appropriately.
+    @plugin_map.each_key { |plugin| Log.write(Log::INFO, "#{plugin} loaded.") }
 
     # Remove obsolete plugins during reloads
     obsolete_plugins = []
@@ -39,6 +45,7 @@ class Plugins
       obsolete_plugins.each do |old_plugin|
         @plugin_map.delete(old_plugin)
         bot.remove_command(old_plugin)
+        Log.write(Log::INFO, "#{old_plugin} unloaded.")
       end
     end
     obsolete_plugins.size

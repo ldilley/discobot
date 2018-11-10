@@ -17,13 +17,16 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 require 'yaml'
+require_relative 'log'
 
 class Options
   def self.parse
     begin
       cfg_file = YAML.load_file('cfg/discobot.yml')
-    rescue => e
-      puts 'Unable to open discobot.yml!'
+    rescue => exception
+      puts "Unable to open discobot.yml: #{exception}"
+      Log.write(Log::CRIT, "Unable to open discobot.yml: #{exception}")
+      #raise
       exit!
     end
     @client_id = cfg_file['client_id']
@@ -33,18 +36,22 @@ class Options
     @status = cfg_file['status']
     if @client_id.nil?
       puts 'Unable to read client_id option from discobot.yml!'
+      Log.write(Log::CRIT, 'Unable to read client_id option from discobot.yml!')
       exit!
     end
     if @token.nil?
       puts 'Unable to read token option from discobot.yml!'
+      Log.write(Log::CRIT, 'Unable to read token option from discobot.yml!')
       exit!
     end
     if @prefix.nil?
       puts 'Unable to read prefix option from discobot.yml!'
+      Log.write(Log::CRIT, 'Unable to read prefix option from discobot.yml!')
       exit!
     end
     if @owner_id.nil?
       puts 'Unable to read owner_id option from discobot.yml!'
+      Log.write(Log::CRIT, 'Unable to read owner_id option from discobot.yml!')
       exit!
     end
   end
