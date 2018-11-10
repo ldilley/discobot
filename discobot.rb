@@ -22,8 +22,9 @@ if RUBY_VERSION < '1.9'
   exit!
 end
 
-require 'cinch'
+#require 'cinch'
 require 'discordrb'
+require_relative 'log'
 require_relative 'options'
 require_relative 'plugins'
 
@@ -32,7 +33,9 @@ $LOAD_PATH << Dir.pwd
 
 VERSION = '0.9.0'
 puts "DiscoBot #{VERSION}"
+Log.write(Log::INFO, "DiscoBot #{VERSION}")
 puts 'Parsing options file...'
+Log.write(Log::INFO, 'Parsing options file...')
 Options.parse
 
 # Daemonize or run in foreground if using JRuby
@@ -52,25 +55,29 @@ elsif ARGV[0] != '-f'
     pid_file = File.open('discobot.pid', 'w')
     pid_file.puts(Process.pid)
     pid_file.close
-  rescue
-    # FIXME: Should we exit here to make the user fix the PID file permissions?
+  rescue => exception
+    Log.write(Log::WARN, "Unable to write PID file: #{exception}")
+    #raise
   end
 end
 
 discobot = Discordrb::Commands::CommandBot.new(token: Options.token, client_id: Options.client_id, prefix: Options.prefix)
 
 puts 'Loading plugins...'
+Log.write(Log::INFO, 'Loading plugins...')
 Plugins.parse(discobot)
 
 # 'reload' is a core command and should never be made a plugin
 discobot.command(:reload) do |event|
   unless event.user.id == Options.owner_id
     discobot.send_message(event.channel.id, "You are not my master, #{event.user.name}.")
+    Log.write(Log::INFO, "#{event.user.name} unsuccessfully attempted to reload plugins.")
     break
   end
   discobot.send_message(event.channel.id, "Reloading plugins, #{event.user.name}...")
   plugins_removed = Plugins.parse(discobot)
   discobot.send_message(event.channel.id, "Plugin reload complete. #{Plugins.plugin_map.size} plugins loaded. #{plugins_removed} plugins unloaded.")
+  Log.write(Log::INFO, "#{event.user.name} successfully reloaded plugins.\n#{Plugins.plugin_map.size} plugins loaded.\n#{plugins_removed} plugins unloaded.")
 end
 
 #discobot.run
@@ -98,9 +105,13 @@ discobot.run :async
 #  puts c.type
 #end
 
-discobot.game=(Options.status)
+discobot.game=(Options.status) unless Options.status.empty?
+Log.write(Log::INFO, "Bot status set to: #{Options.status}") unless Options.status.empty?
 # Send greeting on connect
 key, primary_server = discobot.servers.first
+# ToDo: Make startup greeting configurable.
 default_channel = primary_server.default_channel.send("It's time to boogie!")
+# unless Options.startup_greeting.empty?
+Log.write(Log::INFO, "Bot sent startup greeting to channel \"##{primary_server.default_channel.name}\" on server \"#{primary_server.name}\".")
 
 discobot.sync
