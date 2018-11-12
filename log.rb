@@ -43,7 +43,7 @@ class Log
       log_file.close
     rescue => exception
       puts "Unable to write to log file: #{exception}"
-      #raise
+      # discobot.yml is parsed after logging. debug_mode does not exist initially as a result.
     end
   end
 end

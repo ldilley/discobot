@@ -37,6 +37,7 @@ Log.write(Log::INFO, "DiscoBot #{VERSION}")
 puts 'Parsing options file...'
 Log.write(Log::INFO, 'Parsing options file...')
 Options.parse
+Thread.abort_on_exception = true if Options.debug_mode
 
 # Daemonize or run in foreground if using JRuby
 puts 'Going into daemon mode... '
@@ -57,7 +58,8 @@ elsif ARGV[0] != '-f'
     pid_file.close
   rescue => exception
     Log.write(Log::WARN, "Unable to write PID file: #{exception}")
-    #raise
+    Log.write(Log::DBUG, exception.backtrace) if Options.debug_mode
+    raise if Options.debug_mode
   end
 end
 
