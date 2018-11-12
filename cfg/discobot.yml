@@ -12,3 +12,9 @@ owner_id: 000
 
 # Bot status (leave blank for no status)
 status: Music from the 1970s
+
+# Enable debug_mode to increase logging and exit with
+# a backtrace when an exception is encountered. This
+# option should NOT be used for production bots since
+# the program will be more apt to terminate. 
+debug_mode: false

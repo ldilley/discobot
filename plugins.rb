@@ -17,6 +17,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 require_relative 'log'
+require_relative 'options'
 
 class Plugins
   @plugin_map = {}
@@ -28,7 +29,8 @@ class Plugins
     rescue => exception
       puts "Unable to open plugins.yml: #{exception}"
       Log.write(Log::CRIT, "Unable to open plugins.yml: #{exception}")
-      #raise
+      Log.write(Log::DBUG, exception.backtrace) if Options.debug_mode
+      raise if Options.debug_mode
       exit! # unless reloaded
     end
 
