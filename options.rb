@@ -33,6 +33,7 @@ class Options
     @prefix = cfg_file['prefix']
     @owner_id = cfg_file['owner_id']
     @status = cfg_file['status']
+    @startup_greeting = cfg_file['startup_greeting']
     @debug_mode = cfg_file['debug_mode']
     if @client_id.nil?
       puts 'Unable to read client_id option from discobot.yml!'
@@ -63,6 +64,6 @@ class Options
   end
 
   class << self
-    attr_reader :client_id, :token, :prefix, :owner_id, :status, :debug_mode
+    attr_reader :client_id, :token, :prefix, :owner_id, :status, :startup_greeting, :debug_mode
   end
 end
