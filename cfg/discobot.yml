@@ -13,6 +13,9 @@ owner_id: 000
 # Bot status (leave blank for no status)
 status: Music from the 1970s
 
+# Message sent to default channel on startup (leave blank to not send a greeting)
+startup_greeting: It's time to boogie!
+
 # Enable debug_mode to increase logging and exit with
 # a backtrace when an exception is encountered. This
 # option should NOT be used for production bots since

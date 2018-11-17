@@ -110,10 +110,10 @@ discobot.run :async
 discobot.game=(Options.status) unless Options.status.empty?
 Log.write(Log::INFO, "Bot status set to: #{Options.status}") unless Options.status.empty?
 # Send greeting on connect
-key, primary_server = discobot.servers.first
-# ToDo: Make startup greeting configurable.
-default_channel = primary_server.default_channel.send("It's time to boogie!")
-# unless Options.startup_greeting.empty?
-Log.write(Log::INFO, "Bot sent startup greeting to channel \"##{primary_server.default_channel.name}\" on server \"#{primary_server.name}\".")
+unless Options.startup_greeting.empty?
+  key, primary_server = discobot.servers.first
+  primary_server.default_channel.send(Options.startup_greeting)
+  Log.write(Log::INFO, "Bot sent startup greeting to channel \"##{primary_server.default_channel.name}\" on server \"#{primary_server.name}\".")
+end
 
 discobot.sync
