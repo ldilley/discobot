@@ -35,6 +35,7 @@ class Plugins
     end
 
     # Initialize each plugin
+    bot.clear! # remove any stale events to avoid duplicates
     plugins.each { |plugin_name| @plugin_map[plugin_name] = instance_eval(File.read("plugins/#{plugin_name}.rb")) }
     @plugin_map.each_value { |plugin| plugin.init(bot) }
     # ToDo: Handle exceptions separately for both operations directly above and log appropriately.
