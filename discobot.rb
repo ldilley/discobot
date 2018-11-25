@@ -107,7 +107,7 @@ discobot.run :async
 #  puts c.type
 #end
 
-discobot.game=(Options.status) unless Options.status.empty?
+discobot.game = (Options.status) unless Options.status.empty?
 Log.write(Log::INFO, "Bot status set to: #{Options.status}") unless Options.status.empty?
 # Send greeting on connect
 unless Options.startup_greeting.empty?

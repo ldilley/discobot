@@ -4,4 +4,5 @@ plugins:
 # - joinv       # join voice channel (requires ffmpeg and libsodium)
   - shutdown    # shuts down the bot
 # - silence     # stops playing audio (requires ffmpeg and libsodium)
+  - status      # sets status message
   - uptime      # reports bot uptime
