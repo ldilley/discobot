@@ -34,6 +34,16 @@ class Plugins
       exit! # unless reloaded
     end
 
+    # Remove duplicate plugins during reload
+    unless @plugin_map.empty?
+      plugins.each do |plugin|
+        if @plugin_map.has_key?(plugin)
+          @plugin_map.delete(plugin)
+          bot.remove_command(plugin)
+        end
+      end
+    end
+
     # Initialize each plugin
     bot.clear! # remove any stale events to avoid duplicates
     plugins.each { |plugin_name| @plugin_map[plugin_name] = instance_eval(File.read("plugins/#{plugin_name}.rb")) }
